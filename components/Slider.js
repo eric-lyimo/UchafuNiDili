@@ -42,7 +42,7 @@ class Slider extends React.Component {
                 <ImageBackground
                   key={index}
                   source={image}
-                  style={{width,height:400,resizeMode:'contain'}}
+                  style={{width,height:400,resizeMode:'center'}}
                 />
               ))
             }
@@ -50,8 +50,7 @@ class Slider extends React.Component {
           <Block style={{flexDirection:'row', possition:'absolute', bottom:0, alignSelf:'center'}}>
             {
               this.props.images.map((i,k)=>(
-                <Text key={k}
-                style={k==this.state.active ? styles.paginationTextActive : styles.paginationText}>⬤
+                <Text key={k} style={k==this.state.active ? styles.paginationTextActive : styles.paginationText}>⬤
                 </Text>
               ))
             }
