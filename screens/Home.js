@@ -1,42 +1,30 @@
-import React from 'react';
-import { StyleSheet, Dimensions, ScrollView } from 'react-native';
-import { Block, theme } from 'galio-framework';
+import React from 'react'
+import Container from '../components/Container';
+import Info from '../components/Info';
+import Services from '../components/Service';
+import { useNavigation } from '@react-navigation/native';
+import {  Entypo } from '@expo/vector-icons';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
-import { Card } from '../components';
-import articles from '../constants/articles';
-import ArButton from '../components/Button';
-const { width } = Dimensions.get('screen');
 
-class Home extends React.Component {
-  renderArticles = () => {
-    return (
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.articles}>
-        <Block flex>
-          <Card item={articles[0]} full />
-        </Block>
-      </ScrollView>
+
+const HomeScreen=()=>{
+  const {setOptions,toggleDrawer}=useNavigation()
+
+ React.useEffect(()=>{
+    setOptions({
+      headerLeft:()=>
+        <TouchableOpacity onPress={()=>{toggleDrawer()}}>
+          <Entypo name='menu' size={30} style={{padding:10}}/>
+        </TouchableOpacity>
+    })
+  },[])
+    return(
+     <Container> 
+       <Info username='@eric-Lyimo'></Info>
+       <Services/>
+     </Container> 
     )
-  }
-
-  render() {
-    return (
-      <Block flex center style={styles.home}>
-        {this.renderArticles()}
-      </Block>
-    );
-  }
 }
 
-const styles = StyleSheet.create({
-  home: {
-    width: width,    
-  },
-  articles: {
-    width: width - theme.SIZES.BASE * 2,
-    paddingVertical: theme.SIZES.BASE,
-  },
-});
-
-export default Home;
+export default HomeScreen

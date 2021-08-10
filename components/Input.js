@@ -1,76 +1,69 @@
+import { GestureHandlerRefContext } from "@react-navigation/stack";
 import React from "react";
-import { StyleSheet } from "react-native";
-import PropTypes from 'prop-types';
+import {View, Text,TextInput,StyleSheet} from "react-native"
 
-import { Input } from "galio-framework";
 
-import Icon from './Icon';
-import { argonTheme } from "../constants";
+export default Input =({onChangeText,style,value,label,icon,iconPosition,error,...props})=>{
+const [focused, setFocused]= React.useState(false)
 
-class ArInput extends React.Component {
-  render() {
-    const { shadowless, success, error } = this.props;
-
-    const inputStyles = [
-      styles.input,
-      !shadowless && styles.shadow,
-      success && styles.success,
-      error && styles.error,
-      {...this.props.style}
-    ];
-
-    return (
-      <Input
-        placeholder="write something here"
-        placeholderTextColor={argonTheme.COLORS.MUTED}
-        style={inputStyles}
-        color={argonTheme.COLORS.HEADER}
-        iconContent={
-          <Icon
-            size={14}
-            color={argonTheme.COLORS.ICON}
-            name="link"
-            family="AntDesign"
-          />
-        }
-        {...this.props}
-      />
-    );
+  const getFlex=()=>{
+    if(icon && iconPosition){
+      if(iconPosition ==="left"){
+        return "row"
+      }
+      else if(iconPosition==="right"){
+        return "row-reverse"
+      }
+    }
+    else{
+      return 'row'
+    }
+  }
+const getBorder=()=>{
+  if(error){
+    return 'red'
+  }
+  if(focused){
+    return 'blue'
+  }
+  else if(!error){
+    return "grey"
   }
 }
 
-ArInput.defaultProps = {
-  shadowless: false,
-  success: false,
-  error: false
-};
+  return (
+    <View style={{marginLeft:50, marginRight:50, paddingVertical:10}}>
+      {label && <Text style={{paddingLeft:30}}>{label}</Text>}
 
-ArInput.propTypes = {
-  shadowless: PropTypes.bool,
-  success: PropTypes.bool,
-  error: PropTypes.bool
+      <View style={[styles.wrapper,{alignItems: icon ? "center":"baseline"},{borderColor:getBorder(), flexDirection:getFlex()}]}>
+        <View style={{marginTop:5}}>{icon && icon}</View>
+
+        <TextInput
+        style={[styles.textInput, style]}
+        onChangeText={onChangeText}
+        value={value}
+        onFocus={()=>{setFocused(true)}}
+        onBlur={()=>{setFocused(false)}}
+        {...props}
+        />
+      </View>
+      {error && <Text style={{color:"red",fontSize:12,paddingLeft:10}}>{error}</Text>}
+    </View>
+  )
 }
 
 const styles = StyleSheet.create({
-  input: {
-    borderRadius: 4,
-    borderColor: argonTheme.COLORS.BORDER,
-    height: 44,
-    backgroundColor: '#FFFFFF'
-  },
-  success: {
-    borderColor: argonTheme.COLORS.INPUT_SUCCESS,
-  },
-  error: {
-    borderColor: argonTheme.COLORS.INPUT_ERROR,
-  },
-  shadow: {
-    shadowColor: argonTheme.COLORS.BLACK,
-    shadowOffset: { width: 0, height: 1 },
-    shadowRadius: 2,
-    shadowOpacity: 0.05,
-    elevation: 2,
-  }
-});
-
-export default ArInput;
+wrapper:{
+  paddingHorizontal:5,
+  height:42,
+  borderWidth:1,
+  borderRadius:10,
+  alignItems:"center",
+  
+},
+textInput:{
+  flex:1,
+  height:'100%',
+  
+}
+})
